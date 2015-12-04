@@ -1,5 +1,22 @@
 function isNumber(num) {
-  return !isNaN(num)
+    return !isNaN(num)
+}
+
+function createNewUrl(urlNumSplit, number) {
+    number = parseInt(number);
+    number++;
+    number = String(number);
+    newUrl = ""
+    newUrl = newUrl.concat(urlNumSplit[0]);
+    newUrl = newUrl.concat(number);
+    newUrl = newUrl.concat(urlNumSplit[1]);
+    return newUrl
+}
+
+function updateTabUrl(newUrl) {
+    chrome.tabs.query({currentWindow: true, active: true}, function (tab) {
+            chrome.tabs.update(tab.id, {url: newUrl});
+            });
 }
 
 chrome.browserAction.onClicked.addListener(function(tab) {
@@ -20,17 +37,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         }
         if (number.length > 0) {
             urlNumSplit = url.split(number);
-            number = parseInt(number);
-            number++;
-            number = String(number);
-            newUrl = ""
-            newUrl = newUrl.concat(urlNumSplit[0]);
-            newUrl = newUrl.concat(number);
-            newUrl = newUrl.concat(urlNumSplit[1]);
-
-            chrome.tabs.query({currentWindow: true, active: true}, function (tab) {
-            chrome.tabs.update(tab.id, {url: newUrl});
-            });
+            createNewUrl(urlNumSplit, number);
+            updateTabUrl(newUrl);
         }
     }
 });
