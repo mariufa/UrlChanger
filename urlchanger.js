@@ -47,7 +47,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         var number = getNumberStringFromUrl(partWithNumAtEnd);
         if (number.length > 0) {
             urlNumSplit = url.split(number);
-            var newUrlcreateNewUrl(urlNumSplit, number);
+            var newUrl = createNewUrl(urlNumSplit, number);
             updateTabUrl(newUrl);
         }
     }
