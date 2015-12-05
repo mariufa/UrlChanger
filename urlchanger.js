@@ -3,14 +3,19 @@ function isNumber(num) {
 }
 
 function createNewUrl(urlNumSplit, number) {
+    // Update number
     number = parseInt(number);
     number++;
     number = String(number);
-    newUrl = ""
-    newUrl = newUrl.concat(urlNumSplit[0]);
+    
+    urlBeforeNumber = urlNumSplit[0];
+    urlAfterNumber = urlNumSplit[1];
+
+    newUrl = "";
+    newUrl = newUrl.concat(urlBeforeNumber);
     newUrl = newUrl.concat(number);
-    newUrl = newUrl.concat(urlNumSplit[1]);
-    return newUrl
+    newUrl = newUrl.concat(urlAfterNumber);
+    return newUrl;
 }
 
 function updateTabUrl(newUrl) {
@@ -19,22 +24,27 @@ function updateTabUrl(newUrl) {
             });
 }
 
+function getNumberStringFromUrl(partWithNumAtEnd) {
+    var number = "";
+    for (var i = partWithNumAtEnd.length - 1; i >=0; i--) {
+        if(isNumber(partWithNumAtEnd[i])) {
+            number = partWithNumAtEnd[i].concat(number); 
+        } else {
+            break;
+        }
+    }
+    return number;
+}
+
 chrome.browserAction.onClicked.addListener(function(tab) {
     url = tab.url
     var stringValueToSplit = "&"
     var splittedUrl = url.split(stringValueToSplit);
-    // Check if value found
+
+    // Check if could split
     if (splittedUrl.length > 1) {
         var partWithNumAtEnd = splittedUrl[0];
-        length = partWithNumAtEnd.length;
-        var number = "";
-        for (var i = length - 1; i >=0; i--) {
-            if(isNumber(partWithNumAtEnd[i])) {
-                number = partWithNumAtEnd[i].concat(number) 
-            } else {
-                break;
-            }
-        }
+        var number = getNumberStringFromUrl(partWithNumAtEnd);
         if (number.length > 0) {
             urlNumSplit = url.split(number);
             createNewUrl(urlNumSplit, number);
