@@ -11,7 +11,7 @@ function createNewUrl(urlNumSplit, number) {
     urlBeforeNumber = urlNumSplit[0];
     urlAfterNumber = urlNumSplit[1];
 
-    newUrl = "";
+    var newUrl = "";
     newUrl = newUrl.concat(urlBeforeNumber);
     newUrl = newUrl.concat(number);
     newUrl = newUrl.concat(urlAfterNumber);
@@ -47,7 +47,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         var number = getNumberStringFromUrl(partWithNumAtEnd);
         if (number.length > 0) {
             urlNumSplit = url.split(number);
-            createNewUrl(urlNumSplit, number);
+            var newUrlcreateNewUrl(urlNumSplit, number);
             updateTabUrl(newUrl);
         }
     }
