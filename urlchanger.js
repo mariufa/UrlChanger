@@ -2,6 +2,10 @@ function isNumber(num) {
     return !isNaN(num);
 }
 
+function numberFound(number) {
+    return number.length > 0;
+}
+
 function incrementNumber(number) {
     number = parseInt(number);
     number++;
@@ -36,7 +40,7 @@ function getNumberStringFromUrl(url) {
 chrome.browserAction.onClicked.addListener(function(tab) {
     url = tab.url;
     var number = getNumberStringFromUrl(url);
-    if (number.length > 0) {
+    if (numberFound(number)) {
         urlNumSplit = url.split(number);
         var urlParts = {urlBeforeNumber: urlNumSplit[0], urlAfterNumber: urlNumSplit[1]};
         number = incrementNumber(number);
