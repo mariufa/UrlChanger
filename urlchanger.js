@@ -2,19 +2,18 @@ function isNumber(num) {
     return !isNaN(num);
 }
 
-function createNewUrl(urlNumSplit, number) {
-    // Update number
+function incrementNumber(number) {
     number = parseInt(number);
     number++;
     number = String(number);
-    
-    urlBeforeNumber = urlNumSplit[0];
-    urlAfterNumber = urlNumSplit[1];
+    return number;
+}
 
+function createNewUrl(urlParts, number) {
     var newUrl = "";
-    newUrl = newUrl.concat(urlBeforeNumber);
+    newUrl = newUrl.concat(urlParts.urlBeforeNumber);
     newUrl = newUrl.concat(number);
-    newUrl = newUrl.concat(urlAfterNumber);
+    newUrl = newUrl.concat(urlParts.urlAfterNumber);
     return newUrl;
 }
 
@@ -39,7 +38,9 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     var number = getNumberStringFromUrl(url);
     if (number.length > 0) {
         urlNumSplit = url.split(number);
-        var newUrl = createNewUrl(urlNumSplit, number);
+        var urlParts = {urlBeforeNumber: urlNumSplit[0], urlAfterNumber: urlNumSplit[1]};
+        number = incrementNumber(number);
+        var newUrl = createNewUrl(urlParts, number);
         updateTabUrl(newUrl);
     }
 });
