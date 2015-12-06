@@ -1,21 +1,20 @@
 function isNumber(num) {
-    return !isNaN(num)
+    return !isNaN(num);
 }
 
-function createNewUrl(urlNumSplit, number) {
-    // Update number
+function numberFound(number) {
+    return number.length > 0;
+}
+
+function incrementNumber(number) {
     number = parseInt(number);
     number++;
     number = String(number);
-    
-    urlBeforeNumber = urlNumSplit[0];
-    urlAfterNumber = urlNumSplit[1];
+    return number;
+}
 
-    var newUrl = "";
-    newUrl = newUrl.concat(urlBeforeNumber);
-    newUrl = newUrl.concat(number);
-    newUrl = newUrl.concat(urlAfterNumber);
-    return newUrl;
+function createNewUrl(urlParts, number) {
+    return urlParts.urlBeforeNumber + number + urlParts.urlAfterNumber;
 }
 
 function updateTabUrl(newUrl) {
@@ -24,32 +23,25 @@ function updateTabUrl(newUrl) {
             });
 }
 
-function getNumberStringFromUrl(partWithNumAtEnd) {
+function getNumberStringFromUrl(url) {
     var number = "";
-    for (var i = partWithNumAtEnd.length - 1; i >=0; i--) {
-        if(isNumber(partWithNumAtEnd[i])) {
-            number = partWithNumAtEnd[i].concat(number); 
-        } else {
-            break;
-        }
-    }
+    var separatorBeforeNumber = "id=";
+    var separatorAfterNumber = "&";
+    var beforeNumberIndex = 1;
+    var afterNumberIndex = 0;
+    number = url.split(separatorBeforeNumber)[beforeNumberIndex].split(separatorAfterNumber)[afterNumberIndex];
     return number;
 }
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    url = tab.url
-    var stringValueToSplit = "&"
-    var splittedUrl = url.split(stringValueToSplit);
-
-    // Check if could split
-    if (splittedUrl.length > 1) {
-        var partWithNumAtEnd = splittedUrl[0];
-        var number = getNumberStringFromUrl(partWithNumAtEnd);
-        if (number.length > 0) {
-            urlNumSplit = url.split(number);
-            var newUrl = createNewUrl(urlNumSplit, number);
-            updateTabUrl(newUrl);
-        }
+    url = tab.url;
+    var number = getNumberStringFromUrl(url);
+    if (numberFound(number)) {
+        urlNumSplit = url.split(number);
+        var urlParts = {urlBeforeNumber: urlNumSplit[0], urlAfterNumber: urlNumSplit[1]};
+        number = incrementNumber(number);
+        var newUrl = createNewUrl(urlParts, number);
+        updateTabUrl(newUrl);
     }
 });
 
