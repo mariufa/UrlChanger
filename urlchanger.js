@@ -32,7 +32,7 @@ function getNumberStringFromUrl(url) {
     var separatorBeforeNumber = "id=";
     var separatorAfterNumber = "&";
     var beforeNumberIndex = 1;
-    var afterNumberIndex = 0
+    var afterNumberIndex = 0;
     number = url.split(separatorBeforeNumber)[beforeNumberIndex].split(separatorAfterNumber)[afterNumberIndex];
     return number;
 }
